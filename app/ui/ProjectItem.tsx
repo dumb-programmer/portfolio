@@ -14,7 +14,7 @@ export default function ProjectItem({ project }: { project: Project }) {
                     <a href={project.live} target="_blank"><Image src={link} height={25} width={25} alt="github" /></a>
                 </div>
             </div>
-            <p className="mt-4">{project.description}</p>
+            <p className="mt-4 text-gray-600">{project.description}</p>
         </div>
     </div>
 }
