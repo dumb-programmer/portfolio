@@ -1,14 +1,14 @@
 "use client";
 
 import { useFormState } from "react-dom"
-import { createMessage } from "../lib/actions"
+import { createMessage } from "../../lib/actions"
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import clsx from "clsx";
-import { messageSchema } from "../lib/schema";
+import { messageSchema } from "../../lib/schema";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import SubmitButton from "../ui/SubmitButton";
+import SubmitButton from "../../ui/SubmitButton";
 
 export default function Page() {
     const [state, action] = useFormState(createMessage, null);
