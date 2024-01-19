@@ -9,7 +9,11 @@ export async function createMessage(initialState: any, formData: FormData) {
   const parsed = messageSchema.safeParse(data);
   if (parsed.success) {
     const messageRef = collection(db, "Messages");
-    await addDoc(messageRef, { ...parsed.data, timestamp: serverTimestamp() });
+    await addDoc(messageRef, {
+      ...parsed.data,
+      timestamp: serverTimestamp(),
+      isNew: true,
+    });
     return { sucess: true };
   } else {
     return {
