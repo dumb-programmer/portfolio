@@ -22,16 +22,18 @@ import {
 import { useState } from "react"
 import MessageModal from "./MessageModal"
 import { Message } from "./columns"
+import clsx from "clsx"
 
-interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[]
-    data: TData[]
-}
+// interface DataTableProps<TData, TValue> {
+//     columns: ColumnDef<TData, TValue>[]
+//     data: TData[]
+// }
 
-export function DataTable<TData, TValue>({
+export function DataTable<TValue>({
     columns,
     data,
-}: DataTableProps<TData, TValue>) {
+    markRowAsRead
+}: { columns: ColumnDef<Message, TValue>[], data: Message[], markRowAsRead: (id: string) => void }) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [selectedMessage, setSelectedMessage] = useState<Message>();
@@ -87,9 +89,16 @@ export function DataTable<TData, TValue>({
                             {table.getRowModel().rows?.length ? (
                                 table.getRowModel().rows.map((row) => (
                                     <TableRow
-                                        onClick={() => setSelectedMessage(row.original as Message)}
                                         key={row.id}
                                         data-state={row.getIsSelected() && "selected"}
+                                        className={clsx("cursor-pointer transition-shadow hover:shadow-[0_0_6px_2px_rgba(0,0,0,0.3)]", row.original.isNew && "bg-green-200 hover:bg-green-200")}
+                                        onClick={() => {
+                                            setSelectedMessage(row.original)
+                                            if (row.original.isNew) {
+                                                fetch(`${process.env.NEXT_PUBLIC_API}/messages/${row.original.id}`, { method: "POST", body: JSON.stringify({ isNew: false }) });
+                                                markRowAsRead(row.original.id);
+                                            }
+                                        }}
                                     >
                                         {row.getVisibleCells().map((cell) => (
                                             <TableCell key={cell.id}>

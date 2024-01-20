@@ -9,18 +9,20 @@ export async function middleware(req: NextRequest) {
   if (encodedTokens) {
     const tokens = JSON.parse(encodedTokens.value);
     try {
-      const result = await signInWithCredential(
+      await signInWithCredential(
         auth,
         GoogleAuthProvider.credential(tokens.id_token, tokens.access_token)
       );
       return NextResponse.next();
-    } catch (error) {
-      return NextResponse.redirect(new URL("/admin", req.url));
-    }
+    } catch (error) {}
   }
-  return NextResponse.redirect(new URL("/admin", req.url));
+  if (req.nextUrl.pathname.startsWith("/api/messages")) {
+    return NextResponse.json("Forbidden", { status: 403 });
+  } else {
+    return NextResponse.redirect(new URL("/admin", req.url));
+  }
 }
 
 export const config = {
-  matcher: "/admin/dashboard/:path*",
+  matcher: ["/admin/dashboard/:path*", "/api/messages/:path*"],
 };

@@ -19,11 +19,19 @@ export const columns: ColumnDef<Message>[] = [
         accessorKey: "timestamp",
         header: "",
         cell: ({ row }) => {
-            const time = new Intl.DateTimeFormat("en-PK", { hour: "numeric", minute: "numeric" }).format(row.getValue("timestamp"));
             const date = new Intl.DateTimeFormat("en-PK", { dateStyle: "short" }).format(row.getValue("timestamp"));
-            return <>{time} - {date}</>
+            return <>{date}</>
         }
     },
+    {
+        accessorKey: "timestamp",
+        header: "",
+        cell: ({ row }) => {
+            const time = new Intl.DateTimeFormat("en-PK", { hour: "numeric", minute: "numeric" }).format(row.getValue("timestamp"));
+            return <p className="min-w-16">{time}</p>
+        }
+    },
+
     {
         accessorKey: "name",
         header: ({ column }) => {
