@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="flex flex-col gap-4 items-center justify-center p-20">
+    <main className="flex flex-col gap-4 items-center justify-center mt-32 md:mt-20">
       <Image className="rounded-full" width={300} height={300} src={picture} alt="" />
       <h1 className="text-3xl text-center">Hello, I am <span className="text-purple-600 font-bold">Asad Khan</span>, Web Developer</h1>
       <div className="flex gap-4">
@@ -16,7 +16,7 @@ export default function Home() {
           <Image width={30} height={30} src={linkedin} alt="linkedin" />
         </a>
       </div>
-      <a href="/contact" className="bg-purple-600 p-4 text-fuchsia-50 rounded-lg">Contact Me</a>
+      <a href="/contact" className="bg-purple-600 p-4 text-fuchsia-50 rounded-full focus:outline-offset-2 focus:outline-2 focus:outline-purple-600 hover:bg-purple-500 transition-all disabled:bg-purple-500">Contact Me</a>
     </main>
   )
 }

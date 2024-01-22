@@ -3,13 +3,13 @@ export default function Header() {
         <nav>
             <ul className="flex gap-6">
                 <li>
-                    <a href="/projects">Projects</a>
+                    <a className="focus:outline-offset-2 focus:outline-2 focus:outline-purple-600 hover:text-purple-600 transition-all" href="/projects">Projects</a>
                 </li>
                 <li>
-                    <a href="/about">About</a>
+                    <a className="focus:outline-offset-2 focus:outline-2 focus:outline-purple-600 hover:text-purple-600 transition-all" href="/about">About</a>
                 </li>
                 <li>
-                    <a href="/blog">Blog</a>
+                    <a className="focus:outline-offset-2 focus:outline-2 focus:outline-purple-600 hover:text-purple-600 transition-all" href="/blog">Blog</a>
                 </li>
             </ul>
         </nav>
