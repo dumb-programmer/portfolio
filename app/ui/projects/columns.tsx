@@ -7,6 +7,11 @@ import Image from "next/image"
 
 export const columns: ColumnDef<Project>[] = [
     {
+        header: "",
+        accessorKey: "id",
+        cell: () => null,
+    },
+    {
         accessorKey: "preview",
         header: "Preview",
         cell: (row) => {
@@ -14,6 +19,7 @@ export const columns: ColumnDef<Project>[] = [
         }
     },
     {
+        id: "name",
         accessorKey: "title",
         header: ({ column }) => {
             return <button className="flex items-center gap-2" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
@@ -30,9 +36,10 @@ export const columns: ColumnDef<Project>[] = [
     },
     {
         id: "actions",
-        cell: () => <div className="flex gap-4">
-            <button className="hover:bg-gray-200 p-2 rounded-lg transition-colors"><PencilIcon height={15} width={15} /></button>
-            <button className="hover:bg-gray-200 p-2 rounded-lg transition-colors"><TrashIcon height={15} width={15} /></button>
-        </div>
+        cell: ({ table, row }) => {
+            return <div className="flex gap-4">
+                <button className="hover:bg-gray-200 p-2 rounded-lg transition-colors" onClick={() => table.options?.meta?.setProjectId(row.getValue("id") as string)}><TrashIcon height={15} width={15} /></button>
+            </div>
+        }
     }
 ]

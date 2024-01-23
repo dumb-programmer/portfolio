@@ -11,7 +11,7 @@ export default async function Sidebar() {
                 <li>
                     <Link className="flex items-center gap-2 relative p-4 rounded-3xl transition-colors hover:bg-gray-300" href="/admin/dashboard">
                         <InboxIcon height={24} width={24} />
-                        Messages {count > 0 && <span className="absolute top-[-8px] left-3 text-xs flex justify-center items-center bg-red-400 rounded-3xl h-4 w-4 text-fuchsia-50">{count}</span>}
+                        Messages {count > 0 && <span className="absolute top-3 left-7 text-xs flex justify-center items-center bg-red-400 rounded-3xl h-4 w-4 text-fuchsia-50">{count}</span>}
                     </Link>
                 </li>
                 <li>

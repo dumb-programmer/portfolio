@@ -21,18 +21,18 @@ import {
 } from "@/components/ui/table"
 import { useState } from "react"
 import { Project } from "@/app/lib/types";
-
-// interface DataTableProps<TData, TValue> {
-//     columns: ColumnDef<TData, TValue>[]
-//     data: TData[]
-// }
+import DeleteConfirmationModal from "./DeleteConfirmationModal";
+import EditModal from "./EditModal";
 
 export function DataTable<TValue>({
     columns,
     data,
-}: { columns: ColumnDef<Project, TValue>[], data: Project[] }) {
+    deleteProject,
+}: { columns: ColumnDef<Project, TValue>[], data: Project[], deleteProject: (id: string) => void }) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+    const [selectedProjectId, setSelectedProjectId] = useState<string>();
+    const [selectedProject, setSelectedProject] = useState<Project>();
 
     const table = useReactTable({
         data,
@@ -45,6 +45,9 @@ export function DataTable<TValue>({
         state: {
             sorting,
             columnFilters
+        },
+        meta: {
+            setProjectId: (id: string) => setSelectedProjectId(id),
         }
     })
 
@@ -86,6 +89,8 @@ export function DataTable<TValue>({
                                 table.getRowModel().rows.map((row) => (
                                     <TableRow
                                         key={row.id}
+                                        className="cursor-pointer transition-shadow hover:shadow-[0_0_6px_2px_rgba(0,0,0,0.3)]"
+                                        onClick={() => setSelectedProject(row.original)}
                                         data-state={row.getIsSelected() && "selected"}
                                     >
                                         {row.getVisibleCells().map((cell) => (
@@ -106,6 +111,8 @@ export function DataTable<TValue>({
                     </Table>
                 </div>
             </div>
+            <DeleteConfirmationModal projectId={selectedProjectId} onClose={() => setSelectedProjectId(undefined)} onSuccess={deleteProject} />
+            <EditModal project={selectedProject} onClose={() => setSelectedProject(undefined)} onSuccess={(project: Project) => {}} />
         </>
     )
 }
