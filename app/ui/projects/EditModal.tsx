@@ -11,7 +11,7 @@ import FileInput from "../FileInput";
 
 export default function EditModal({ project, onClose, onSuccess }: { project: Project | undefined, onClose: () => void, onSuccess: (project: Project) => void }) {
     const [loading, setLoading] = useState(false);
-    const { register, formState: { errors } } = useForm({
+    const { register, formState: { errors }, setValue, watch } = useForm({
         defaultValues: {
             ...project
         },
@@ -43,7 +43,7 @@ export default function EditModal({ project, onClose, onSuccess }: { project: Pr
                     </div>
                     <div className="flex flex-col text-sm gap-2">
                         <label htmlFor="preview">Preview</label>
-                        <FileInput />
+                        <FileInput setPreview={(preview: string[]) => setValue("preview", preview)} />
                     </div>
                 </form>
             </div>

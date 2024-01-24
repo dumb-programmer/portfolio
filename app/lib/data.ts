@@ -16,13 +16,19 @@ export async function getProjects() {
   return projectDocs.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
+    timestamp: (doc.data().timestamp as Timestamp).toDate(),
   })) as Project[];
 }
 
-
 export async function getMessages(): Promise<Message[]> {
-  const docs = await getDocs(query(collection(db, "Messages"), orderBy("timestamp", "desc")));
-  return  docs.docs.map(doc => ({ id: doc.id, ...doc.data(), timestamp: (doc.data().timestamp as Timestamp).toDate() })) as Message[];
+  const docs = await getDocs(
+    query(collection(db, "Messages"), orderBy("timestamp", "desc"))
+  );
+  return docs.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+    timestamp: (doc.data().timestamp as Timestamp).toDate(),
+  })) as Message[];
 }
 
 export async function countNewMessages() {

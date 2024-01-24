@@ -1,7 +1,7 @@
 "use client"
 
 import { Project } from "@/app/lib/types"
-import { ArrowDownIcon, ArrowUpIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/solid"
+import { ArrowDownIcon, ArrowUpIcon, TrashIcon } from "@heroicons/react/24/solid"
 import { ColumnDef } from "@tanstack/react-table"
 import Image from "next/image"
 
@@ -15,7 +15,7 @@ export const columns: ColumnDef<Project>[] = [
         accessorKey: "preview",
         header: "Preview",
         cell: (row) => {
-            return <Image src={row.getValue() as string} height={100} width={200} alt="" />
+            return <img src={(row.getValue() as string[])[0]} height={100} width={200} alt="" />
         }
     },
     {
@@ -38,7 +38,10 @@ export const columns: ColumnDef<Project>[] = [
         id: "actions",
         cell: ({ table, row }) => {
             return <div className="flex gap-4">
-                <button className="hover:bg-gray-200 p-2 rounded-lg transition-colors" onClick={() => table.options?.meta?.setProjectId(row.getValue("id") as string)}><TrashIcon height={15} width={15} /></button>
+                <button className="hover:bg-gray-200 p-2 rounded-lg transition-colors" onClick={(e) => {
+                    e.stopPropagation();
+                    table.options?.meta?.setProjectId(row.getValue("id") as string)
+                }}><TrashIcon height={15} width={15} /></button>
             </div>
         }
     }

@@ -18,7 +18,7 @@ export const projectSchema = z.object({
   description: z
     .string()
     .min(10, { message: "Description must be 10 characters" }),
-  github: z.string().url({ message: "Github must be a valid URL" }),
-  live: z.string().url({ message: "Live must be a valid URL" }),
-  preview: z.string(),
+  github: z.string().url(),
+  live: z.string().url(),
+  preview: z.array(z.string()),
 });

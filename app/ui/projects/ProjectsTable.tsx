@@ -7,5 +7,7 @@ import { columns } from "./columns";
 
 export default function ProjectsTable({ initialData }: { initialData: Project[] }) {
     const [projects, setProjects] = useState(initialData);
-    return <DataTable data={projects} columns={columns} deleteProject={(id) => setProjects(projects => projects.filter(project => project.id !== id))} />;
+    return <DataTable data={projects} columns={columns} addProject={(project) => {
+        setProjects(projects => [project, ...projects])
+    }} deleteProject={(id) => setProjects(projects => projects.filter(project => project.id !== id))} />;
 }

@@ -1,32 +1,31 @@
+import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import LoadingIcon from "./LoadingIcon";
-import Image from "next/image";
+import clsx from "clsx";
 
-export default function FilePreview({ file }: { file: File }) {
-    const [loading, setLoading] = useState(false);
-    const [preview, setPreview] = useState<string>();
+export default function FilePreview({ file, onDelete }: { file: Promise<{ url: string, name: string }>, onDelete: (id: string) => void }) {
+    const [preview, setPreview] = useState<{ url: string, name: string }>();
+    const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
-        let ignore = false;
-        const abortController = new AbortController();
-        const data = new FormData();
-        data.set("file", file);
-        fetch("http://localhost:3000/api/upload", { method: "POST", body: data, signal: abortController.signal }).then(res => {
-            res.json().then(data => {
-                if (!ignore) {
-                    setPreview(data.url)
-                }
-            })
-        })
-        return () => {
-            ignore = true
-            abortController.abort()
-        }
-    }, [file]);
+        file.then(preview => setPreview(preview))
+    }, [file])
 
     if (preview) {
-        return <Image src={preview} height={100} width={200} alt="" />
+        return <div className={clsx("relative transition-opacity shadow-md", isDeleting && "opacity-50")}>
+            <button className={clsx("flex justify-center items-center absolute -top-2 -right-1 bg-gray-300 p-1 rounded-full", isDeleting && "cursor-not-allowed")} onClick={isDeleting ? (e) => e.preventDefault() : async (e) => {
+                e.preventDefault();
+                setIsDeleting(true);
+                const res = await fetch(`http://localhost:3000/api/files/${preview.name}`, { method: "DELETE" });
+                if (res.ok) {
+                    onDelete(preview.name)
+                    setIsDeleting(false);
+                }
+            }}><XMarkIcon height={13} width={13} color="black" /></button>
+            <img src={preview.url} height={100} width={200} alt="" />
+        </div>
     }
 
-    return <div className="border border-black p-8 rounded-md"><LoadingIcon size={20} stroke="#000" /></div>;
+    return <div className="h-[100px] w-[200px] bg-gray-400 rounded-md animate-pulse  flex justify-center items-center">
+        <PhotoIcon className="h-10 w-5 text-fuchsia-50" />
+    </div>;
 }

@@ -23,16 +23,20 @@ import { useState } from "react"
 import { Project } from "@/app/lib/types";
 import DeleteConfirmationModal from "./DeleteConfirmationModal";
 import EditModal from "./EditModal";
+import { PlusIcon } from "@heroicons/react/24/solid";
+import CreateModal from "./CreateModal";
 
 export function DataTable<TValue>({
     columns,
     data,
+    addProject,
     deleteProject,
-}: { columns: ColumnDef<Project, TValue>[], data: Project[], deleteProject: (id: string) => void }) {
+}: { columns: ColumnDef<Project, TValue>[], data: Project[], addProject: (project: Project) => void, deleteProject: (id: string) => void }) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [selectedProjectId, setSelectedProjectId] = useState<string>();
     const [selectedProject, setSelectedProject] = useState<Project>();
+    const [showCreateProjectModal, setShowCreateProjectModal] = useState(false);
 
     const table = useReactTable({
         data,
@@ -47,14 +51,17 @@ export function DataTable<TValue>({
             columnFilters
         },
         meta: {
-            setProjectId: (id: string) => setSelectedProjectId(id),
+            setProjectId: (id: string) => {
+                console.log(id);
+                setSelectedProjectId(id)
+            },
         }
     })
 
     return (
         <>
-            <div className="h-full">
-                <div className="flex items-center py-4">
+            <div className="h-full flex flex-col gap-2">
+                <div className="flex items-center">
                     <input
                         placeholder="Filter Name..."
                         value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
@@ -64,6 +71,7 @@ export function DataTable<TValue>({
                         className="min-w-full border border-gray-200 p-2 rounded-md"
                     />
                 </div>
+                <div className="flex justify-end"><button className="flex justify-center items-center rounded-full text-fuchsia-50 text-sm bg-purple-600 p-2 min-w-36 gap-2 transition-colors hover:bg-purple-500" onClick={() => setShowCreateProjectModal(true)}><PlusIcon height={20} width={20} color="#fff" /> Add Project</button></div>
                 <div className="rounded-md border h-5/6 overflow-y-auto">
                     <Table>
                         <TableHeader>
@@ -112,7 +120,11 @@ export function DataTable<TValue>({
                 </div>
             </div>
             <DeleteConfirmationModal projectId={selectedProjectId} onClose={() => setSelectedProjectId(undefined)} onSuccess={deleteProject} />
-            <EditModal project={selectedProject} onClose={() => setSelectedProject(undefined)} onSuccess={(project: Project) => {}} />
+            <EditModal project={selectedProject} onClose={() => setSelectedProject(undefined)} onSuccess={(project: Project) => { }} />
+            <CreateModal open={showCreateProjectModal} onClose={() => setShowCreateProjectModal(false)} onSuccess={(project) => {
+                addProject(project)
+                setShowCreateProjectModal(false);
+            }} />
         </>
     )
 }
