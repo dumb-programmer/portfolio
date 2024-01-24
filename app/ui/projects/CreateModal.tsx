@@ -8,7 +8,6 @@ import { projectSchema } from "@/app/lib/schema";
 import CreateForm from "./CreateForm";
 import { createProject } from "@/app/lib/actions";
 
-const formId = "create-project-form";
 export default function CreateModal({ open, onClose, onSuccess }: { open: boolean, onClose: () => void, onSuccess: (project: Project) => void }) {
     const { register, formState: { errors, isSubmitting }, setValue, handleSubmit, reset } = useForm<Project>({
         defaultValues: {
@@ -26,7 +25,7 @@ export default function CreateModal({ open, onClose, onSuccess }: { open: boolea
             <AlertDialogHeader>
                 <AlertDialogTitle>Add Project</AlertDialogTitle>
             </AlertDialogHeader>
-            <CreateForm formId={formId} errors={errors} register={register} setValue={setValue} />
+            <CreateForm errors={errors} register={register} setValue={setValue} />
             <AlertDialogFooter className="flex gap-4">
                 <AlertDialogCancel className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2">Cancel</AlertDialogCancel>
                 <AlertDialogAction onClick={handleSubmit(async (data) => {

@@ -12,6 +12,7 @@ export const messageSchema = z.object({
 });
 
 export const projectSchema = z.object({
+  id: z.string().optional(),
   title: z
     .string()
     .min(1, { message: "Title must contain at least 1 character" }),

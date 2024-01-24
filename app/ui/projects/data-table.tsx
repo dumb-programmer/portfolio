@@ -30,8 +30,9 @@ export function DataTable<TValue>({
     columns,
     data,
     addProject,
+    editProject,
     deleteProject,
-}: { columns: ColumnDef<Project, TValue>[], data: Project[], addProject: (project: Project) => void, deleteProject: (id: string) => void }) {
+}: { columns: ColumnDef<Project, TValue>[], data: Project[], addProject: (project: Project) => void, editProject: (project: Project) => void, deleteProject: (id: string) => void }) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
     const [selectedProjectId, setSelectedProjectId] = useState<string>();
@@ -120,7 +121,10 @@ export function DataTable<TValue>({
                 </div>
             </div>
             <DeleteConfirmationModal projectId={selectedProjectId} onClose={() => setSelectedProjectId(undefined)} onSuccess={deleteProject} />
-            <EditModal project={selectedProject} onClose={() => setSelectedProject(undefined)} onSuccess={(project: Project) => { }} />
+            <EditModal project={selectedProject} onClose={() => setSelectedProject(undefined)} onSuccess={(project: Project) => {
+                editProject(project);
+                setSelectedProject(undefined);
+            }} />
             <CreateModal open={showCreateProjectModal} onClose={() => setShowCreateProjectModal(false)} onSuccess={(project) => {
                 addProject(project)
                 setShowCreateProjectModal(false);

@@ -2,8 +2,8 @@ import { PhotoIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
 import clsx from "clsx";
 
-export default function FilePreview({ file, onDelete }: { file: Promise<{ url: string, name: string }>, onDelete: (id: string) => void }) {
-    const [preview, setPreview] = useState<{ url: string, name: string }>();
+export default function FilePreview({ file, onDelete }: { file: Promise<string>, onDelete: (id: string) => void }) {
+    const [preview, setPreview] = useState<string>();
     const [isDeleting, setIsDeleting] = useState(false);
 
     useEffect(() => {
@@ -15,13 +15,13 @@ export default function FilePreview({ file, onDelete }: { file: Promise<{ url: s
             <button className={clsx("flex justify-center items-center absolute -top-2 -right-1 bg-gray-300 p-1 rounded-full", isDeleting && "cursor-not-allowed")} onClick={isDeleting ? (e) => e.preventDefault() : async (e) => {
                 e.preventDefault();
                 setIsDeleting(true);
-                const res = await fetch(`http://localhost:3000/api/files/${preview.name}`, { method: "DELETE" });
+                const res = await fetch(`http://localhost:3000/api/files?url=${preview}`, { method: "DELETE" });
                 if (res.ok) {
-                    onDelete(preview.name)
+                    onDelete(preview)
                     setIsDeleting(false);
                 }
             }}><XMarkIcon height={13} width={13} color="black" /></button>
-            <img src={preview.url} height={100} width={200} alt="" />
+            <img src={preview} height={100} width={200} alt="" />
         </div>
     }
 

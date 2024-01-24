@@ -8,6 +8,7 @@ import {
   doc,
   getDoc,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { messageSchema, projectSchema } from "./schema";
 import { z } from "zod";
@@ -66,6 +67,21 @@ export async function createProject(formData: FormData) {
       timestamp: serverTimestamp(),
     });
     return { success: true, id: response.id };
+  } else {
+    return { errors: parsed.error.flatten().fieldErrors };
+  }
+}
+
+export async function editProject(formData: FormData) {
+  const data = Object.fromEntries(formData);
+  data.preview = JSON.parse(data.preview as string);
+  const parsed = projectSchema.safeParse(data);
+  if (parsed.success) {
+    const projectsRef = doc(db, "Projects", parsed.data.id as string);
+    await updateDoc(projectsRef, {
+      ...parsed.data,
+    });
+    return { success: true };
   } else {
     return { errors: parsed.error.flatten().fieldErrors };
   }
