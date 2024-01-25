@@ -24,11 +24,6 @@ import MessageModal from "./MessageModal"
 import { Message } from "./columns"
 import clsx from "clsx"
 
-// interface DataTableProps<TData, TValue> {
-//     columns: ColumnDef<TData, TValue>[]
-//     data: TData[]
-// }
-
 export function DataTable<TValue>({
     columns,
     data,

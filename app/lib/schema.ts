@@ -23,3 +23,8 @@ export const projectSchema = z.object({
   live: z.string().url(),
   preview: z.array(z.string()),
 });
+
+export const loginSchema = z.object({
+  username: z.string(),
+  password: z.string(),
+});

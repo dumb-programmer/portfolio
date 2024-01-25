@@ -1,11 +1,11 @@
 import { CodeBracketIcon, InboxIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { countNewMessages } from "../lib/data";
+import LogoutButton from "./LogoutButton";
 
 export default async function Sidebar() {
     const count = await countNewMessages();
-
-    return <aside className="p-10" style={{ backgroundImage: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)" }}>
+    return <aside className="p-10 relative" style={{ backgroundImage: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)" }}>
         <nav>
             <ul className="flex flex-col gap-8">
                 <li>
@@ -22,5 +22,6 @@ export default async function Sidebar() {
                 </li>
             </ul>
         </nav>
+        <LogoutButton />
     </aside>;
 }

@@ -10,7 +10,7 @@ export default function FileInput({ previews, error, setPreview }: { previews: P
             setFiles(acceptedFiles.map(async (file) => {
                 const data = new FormData();
                 data.set("file", file);
-                const response = await fetch("http://localhost:3000/api/upload", { method: "POST", body: data });
+                const response = await fetch("http://localhost:3000/api/files", { method: "POST", body: data });
                 const result: { url: string } = await response.json();
                 return result.url;
             }));

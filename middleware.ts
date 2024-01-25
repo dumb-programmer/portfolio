@@ -1,28 +1,16 @@
-import { signInWithCredential } from "firebase/auth";
-import { auth } from "./firebase";
-import { NextRequest, NextResponse } from "next/server";
-import { GoogleAuthProvider } from "firebase/auth/cordova";
-import { cookies } from "next/headers";
+import NextAuth from "next-auth";
+import authConfig from "./auth.config";
 
-export async function middleware(req: NextRequest) {
-  const encodedTokens = cookies().get("tokens");
-  if (encodedTokens) {
-    const tokens = JSON.parse(encodedTokens.value);
-    try {
-      await signInWithCredential(
-        auth,
-        GoogleAuthProvider.credential(tokens.id_token, tokens.access_token)
-      );
-      return NextResponse.next();
-    } catch (error) {}
+const { auth } = NextAuth(authConfig);
+
+export default auth((req) => {
+  const isLoggedIn = !!req.auth;
+  if (!isLoggedIn) {
+    return Response.redirect(new URL("/admin", req.nextUrl));
   }
-  if (req.nextUrl.pathname.startsWith("/api/messages")) {
-    return NextResponse.json("Forbidden", { status: 403 });
-  } else {
-    return NextResponse.redirect(new URL("/admin", req.url));
-  }
-}
+  return null;
+});
 
 export const config = {
-  matcher: ["/admin/dashboard/:path*", "/api/messages/:path*"],
+  matcher: ["/admin/dashboard/:path*"],
 };

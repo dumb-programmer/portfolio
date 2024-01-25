@@ -10,10 +10,12 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { messageSchema, projectSchema } from "./schema";
+import { loginSchema, messageSchema, projectSchema } from "./schema";
 import { z } from "zod";
 import { Project } from "./types";
 import { deleteObject, ref } from "firebase/storage";
+import { signIn, signOut } from "@/auth";
+import { AuthError } from "next-auth";
 
 export async function waitFor(time: number) {
   return new Promise((resolve) => {
@@ -85,4 +87,31 @@ export async function editProject(formData: FormData) {
   } else {
     return { errors: parsed.error.flatten().fieldErrors };
   }
+}
+export async function authenticate(formData: FormData) {
+  const parsed = loginSchema.safeParse(Object.fromEntries(formData));
+  if (parsed.success) {
+    try {
+      await signIn("credentials", {
+        ...parsed.data,
+        redirectTo: "/admin/dashboard",
+      });
+    } catch (error) {
+      if (error instanceof AuthError) {
+        switch (error.type) {
+          case "CredentialsSignin":
+            return { error: "Invalid credentails" };
+          default:
+            return { error: "Something went wrong" };
+        }
+      }
+      throw error;
+    }
+  } else {
+    return { errors: parsed.error.flatten().fieldErrors };
+  }
+}
+
+export async function logout() {
+  await signOut({ redirectTo: "/admin" });
 }
