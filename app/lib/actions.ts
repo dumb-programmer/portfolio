@@ -16,6 +16,7 @@ import { Project } from "./types";
 import { deleteObject, ref } from "firebase/storage";
 import { signIn, signOut } from "@/auth";
 import { AuthError } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 export async function waitFor(time: number) {
   return new Promise((resolve) => {
@@ -52,6 +53,7 @@ export async function deleteProject(formData: FormData) {
       )
     );
     await deleteDoc(projectRef);
+    revalidatePath("/projects");
     return { success: true };
   } else {
     return { errors: parsed.error.flatten().fieldErrors };
@@ -68,6 +70,7 @@ export async function createProject(formData: FormData) {
       ...parsed.data,
       timestamp: serverTimestamp(),
     });
+    revalidatePath("/projects");
     return { success: true, id: response.id };
   } else {
     return { errors: parsed.error.flatten().fieldErrors };
@@ -83,6 +86,7 @@ export async function editProject(formData: FormData) {
     await updateDoc(projectsRef, {
       ...parsed.data,
     });
+    revalidatePath("/projects");
     return { success: true };
   } else {
     return { errors: parsed.error.flatten().fieldErrors };

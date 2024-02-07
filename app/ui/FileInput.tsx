@@ -3,7 +3,13 @@ import { useDropzone } from "react-dropzone";
 import FilePreview from "./FilePreview";
 import clsx from "clsx";
 
-export default function FileInput({ previews, error, setPreview }: { previews: Promise<string>[], error: string | undefined, setPreview: (file: string[]) => void }) {
+interface Props {
+    previews?: Promise<string>[]
+    error: string | undefined
+    setPreview: (file: string[]) => void
+}
+
+export default function FileInput({ previews, error, setPreview }: Props) {
     const [files, setFiles] = useState<Promise<string>[]>(previews || []);
     const { getRootProps, getInputProps } = useDropzone({
         onDrop: (acceptedFiles) => {

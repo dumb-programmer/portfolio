@@ -40,7 +40,8 @@ export const columns: ColumnDef<Project>[] = [
             return <div className="flex gap-4">
                 <button className="hover:bg-gray-200 p-2 rounded-lg transition-colors" onClick={(e) => {
                     e.stopPropagation();
-                    table.options?.meta?.setProjectId(row.getValue("id") as string)
+                    // TODO: Define setProjectId on TableMeta<Project>
+                    (table.options?.meta as any)?.setProjectId(row.getValue("id") as string)
                 }}><TrashIcon height={15} width={15} /></button>
             </div>
         }

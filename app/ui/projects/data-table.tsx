@@ -3,7 +3,9 @@
 import {
     ColumnDef,
     ColumnFiltersState,
+    RowData,
     SortingState,
+    TableMeta,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
@@ -53,11 +55,10 @@ export function DataTable<TValue>({
         },
         meta: {
             setProjectId: (id: string) => {
-                console.log(id);
                 setSelectedProjectId(id)
             },
         }
-    })
+    });
 
     return (
         <>

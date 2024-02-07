@@ -9,6 +9,8 @@ import { projectSchema } from "@/app/lib/schema";
 import EditForm from "./EditForm";
 import { editProject } from "@/app/lib/actions";
 
+type ProjectKeys = keyof Project;
+
 export default function EditModal({ project, onClose, onSuccess }: { project: Project | undefined, onClose: () => void, onSuccess: (project: Project) => void }) {
     const { register, formState: { errors, isSubmitting }, handleSubmit, setValue, getValues } = useForm<Project>({
         defaultValues: {
@@ -20,7 +22,7 @@ export default function EditModal({ project, onClose, onSuccess }: { project: Pr
     useEffect(() => {
         if (project) {
             for (const [key, value] of Object.entries(project)) {
-                setValue(key, value);
+                setValue(key as ProjectKeys, value);
             }
         }
     }, [project, setValue]);

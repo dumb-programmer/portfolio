@@ -5,7 +5,7 @@ import link from "@/public/link-icon.svg";
 
 export default function ProjectItem({ project }: { project: Project }) {
     return <div className="shadow-lg rounded-lg">
-        <Image src={project.preview} style={{ minWidth: 300 }} height={400} width={300} alt="" />
+        <Image src={project.preview[0]} style={{ minWidth: 300 }} height={400} width={300} alt="" />
         <div className="p-4">
             <div className="flex items-center justify-between">
                 <h2 className="text-lg font-bold">{project.title}</h2>

@@ -17,14 +17,13 @@ export default {
               query(collection(db, "Users"), where("username", "==", username))
             )
           ).docs.map((doc) => doc.data())[0];
-          const passwordsMatched = await compare(
-            password,
-            user.password
-          );
-          if (passwordsMatched) return user;
+          const passwordsMatched = await compare(password, user.password);
+          if (passwordsMatched) return user as any;
           return null;
         }
       },
     }),
   ],
+  trustHost: true,
+  secret: process.env.NEXTAUTH_SECRET,
 } satisfies NextAuthConfig;
